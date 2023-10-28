@@ -1,0 +1,23 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="450"
+             xmlns:vm="using:TaskTracker.ViewModels"
+             x:DataType="vm:TaskListViewModel"
+             x:Class="TaskTracker.Views.TaskList">
+    <DockPanel>
+        <Button DockPanel.Dock="Bottom"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Center">
+            Add Item
+        </Button>
+        <ItemsControl ItemsSource="{Binding Tasks}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Background="Aqua" Foreground="White" Text="{Binding Content}" Margin="4"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </DockPanel>
+</UserControl>
