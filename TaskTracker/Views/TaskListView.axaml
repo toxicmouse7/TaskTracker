@@ -3,19 +3,26 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="450"
-             xmlns:vm="using:TaskTracker.ViewModels"
+             xmlns:vm="clr-namespace:Application.ViewModels;assembly=Application"
              x:DataType="vm:TaskListViewModel"
-             x:Class="TaskTracker.Views.TaskList">
+             x:Class="TaskTracker.Views.TaskListView">
     <DockPanel>
         <Button DockPanel.Dock="Bottom"
                 HorizontalAlignment="Stretch"
-                HorizontalContentAlignment="Center">
+                HorizontalContentAlignment="Center"
+                x:CompileBindings="False"
+                Command="{Binding $parent[Window].DataContext.AddTask}">
             Add Item
         </Button>
         <ItemsControl ItemsSource="{Binding Tasks}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Background="Aqua" Foreground="White" Text="{Binding Content}" Margin="4"/>
+                    <Border BorderBrush="Aqua" BorderThickness="2">
+                        <DockPanel Margin="10">
+                            <TextBlock HorizontalAlignment="Left" FontSize="24" Text="{Binding Content}" />
+                            <TextBlock HorizontalAlignment="Right" FontSize="24" Text="{Binding TimeWasted}" />
+                        </DockPanel>
+                    </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

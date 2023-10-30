@@ -15,4 +15,9 @@ public class TaskRepository : ITaskRepository
     {
         return Tasks;
     }
+
+    public void AddTask(Task task)
+    {
+        Tasks.Add(task);
+    }
 }

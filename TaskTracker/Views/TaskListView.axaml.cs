@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace TaskTracker.Views;
 
-public partial class TaskList : UserControl
+public partial class TaskListView : UserControl
 {
-    public TaskList()
+    public TaskListView()
     {
         InitializeComponent();
     }

@@ -16,4 +16,9 @@ public class TaskTrackingService : ITaskTrackingService
     {
         return _taskRepository.GetTasks();
     }
+
+    public void AddTask(Task task)
+    {
+        _taskRepository.AddTask(task);
+    }
 }

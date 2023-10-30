@@ -1,6 +1,12 @@
+using System;
+using System.Security.Authentication.ExtendedProtection;
+using Application;
+using Application.ViewModels;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using TaskTracker.ViewModels;
+using Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 using TaskTracker.Views;
 
 namespace TaskTracker;
@@ -10,6 +16,12 @@ public partial class App : Avalonia.Application
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
+        var services = new ServiceCollection();
+
+        services.AddApplication()
+            .AddInfrastructure();
+        
+        Resources[typeof(IServiceProvider)] = services.BuildServiceProvider();
     }
 
     public override void OnFrameworkInitializationCompleted()
@@ -18,7 +30,7 @@ public partial class App : Avalonia.Application
         {
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel()
+                DataContext = this.CreateInstance<MainWindowViewModel>()
             };
         }
 

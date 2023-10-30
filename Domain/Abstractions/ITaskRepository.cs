@@ -5,4 +5,5 @@ namespace Domain.Abstractions;
 public interface ITaskRepository
 {
     public IReadOnlyList<Task> GetTasks();
+    public void AddTask(Task task);
 }
