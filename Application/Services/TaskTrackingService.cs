@@ -5,11 +5,13 @@ namespace Application.Services;
 
 public class TaskTrackingService : ITaskTrackingService
 {
-    private ITaskRepository _taskRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly ITaskRepository _taskRepository;
 
-    public TaskTrackingService(ITaskRepository taskRepository)
+    public TaskTrackingService(ITaskRepository taskRepository, IUnitOfWork unitOfWork)
     {
         _taskRepository = taskRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public IReadOnlyList<Task> GetTasks()
@@ -20,5 +22,6 @@ public class TaskTrackingService : ITaskTrackingService
     public void AddTask(Task task)
     {
         _taskRepository.AddTask(task);
+        _unitOfWork.SaveChanges();
     }
 }

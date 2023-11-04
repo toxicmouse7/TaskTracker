@@ -5,19 +5,20 @@ namespace Infrastructure.Repositories;
 
 public class TaskRepository : ITaskRepository
 {
-    private static readonly List<Task> Tasks = new()
+    private readonly IApplicationDbContext _dbContext;
+
+    public TaskRepository(IApplicationDbContext dbContext)
     {
-        new Task(Guid.NewGuid(), "Task 1"),
-        new Task(Guid.NewGuid(), "Task 2")
-    };
-    
+        _dbContext = dbContext;
+    }
+
     public IReadOnlyList<Task> GetTasks()
     {
-        return Tasks;
+        return _dbContext.Tasks.ToList();
     }
 
     public void AddTask(Task task)
     {
-        Tasks.Add(task);
+        _dbContext.Tasks.Add(task);
     }
 }
