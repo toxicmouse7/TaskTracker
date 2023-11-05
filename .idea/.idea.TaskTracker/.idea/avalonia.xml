@@ -4,6 +4,7 @@
     <option name="projectPerEditor">
       <map>
         <entry key="TaskTracker/App.axaml" value="TaskTracker/TaskTracker.csproj" />
+        <entry key="TaskTracker/Icons.axaml" value="TaskTracker/TaskTracker.csproj" />
         <entry key="TaskTracker/Views/AddTaskView.axaml" value="TaskTracker/TaskTracker.csproj" />
         <entry key="TaskTracker/Views/MainWindow.axaml" value="TaskTracker/TaskTracker.csproj" />
         <entry key="TaskTracker/Views/TaskList.axaml" value="TaskTracker/TaskTracker.csproj" />

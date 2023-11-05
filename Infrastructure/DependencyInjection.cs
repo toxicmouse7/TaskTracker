@@ -16,6 +16,8 @@ public static class DependencyInjection
         
         serviceCollection.AddTransient<IApplicationDbContext>(
             services => services.GetRequiredService<ApplicationDbContext>());
+        serviceCollection.AddTransient<IUnitOfWork>(
+            services => services.GetRequiredService<ApplicationDbContext>());
         
         serviceCollection.AddSingleton<ITaskRepository, TaskRepository>();
 

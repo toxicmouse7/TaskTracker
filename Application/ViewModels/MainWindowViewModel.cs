@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Linq;
+using Application.Extensions;
 using Application.Services;
 using Domain.Abstractions;
 using Infrastructure.Repositories;
@@ -39,7 +40,7 @@ public class MainWindowViewModel : ViewModelBase
                 if (newItem != null)
                 {
                     _taskTrackingService.AddTask(newItem);
-                    TaskListViewModel.Tasks.Add(newItem);
+                    TaskListViewModel.Tasks.Add(newItem.ToReactiveTask());
                 }
 
                 ContentViewModel = TaskListViewModel;

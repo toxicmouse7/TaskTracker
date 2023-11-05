@@ -10,6 +10,22 @@
         Height="450"
         Icon="/Assets/avalonia-logo.ico"
         Title="Task Tracker"
-        Content="{Binding ContentViewModel}">
+        TransparencyLevelHint="AcrylicBlur"
+        Background="Transparent"
+        ExtendClientAreaToDecorationsHint="False">
+    <!-- Content="{Binding ContentViewModel}"> -->
+
+    <Panel>
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    BackgroundSource="Digger"
+                    TintColor="Black"
+                    TintOpacity="1"
+                    MaterialOpacity="0.01" />
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>
+        <UserControl Content="{Binding ContentViewModel}"/>
+    </Panel>
 
 </Window>

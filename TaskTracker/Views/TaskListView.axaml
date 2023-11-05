@@ -7,6 +7,16 @@
              x:DataType="vm:TaskListViewModel"
              x:Class="TaskTracker.Views.TaskListView">
     <DockPanel>
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    BackgroundSource="Digger"
+                    TintColor="Black"
+                    TintOpacity="1"
+                    MaterialOpacity="0.80" />
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>
+        
         <Button DockPanel.Dock="Bottom"
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Center"
@@ -19,8 +29,27 @@
                 <DataTemplate>
                     <Border BorderBrush="Aqua" BorderThickness="2">
                         <DockPanel Margin="10">
-                            <TextBlock HorizontalAlignment="Left" FontSize="24" Text="{Binding Content}" />
-                            <TextBlock HorizontalAlignment="Right" FontSize="24" Text="{Binding TimeWasted}" />
+                            <TextBlock HorizontalAlignment="Left" FontSize="24"
+                                       Text="{Binding Content}" />
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock FontSize="24" Text="{Binding TimeWasted}"
+                                           Padding="0,0,15,0"/>
+                                <Button
+                                    x:CompileBindings="False"
+                                    IsEnabled="{Binding !DataContext.IsTrackingAny, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                    IsVisible="{Binding !IsTracked}"
+                                    Command="{Binding Path=DataContext.StartTrackingCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                    CommandParameter="{Binding}">
+                                    <PathIcon Data="{StaticResource play_circle_regular}" />
+                                </Button>
+                                <Button
+                                    x:CompileBindings="False"
+                                    IsVisible="{Binding IsTracked}"
+                                    Command="{Binding Path=DataContext.StopTrackingCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                    CommandParameter="{Binding}">
+                                    <PathIcon Data="{StaticResource pause_regular}" />
+                                </Button>
+                            </StackPanel>
                         </DockPanel>
                     </Border>
                 </DataTemplate>
