@@ -21,6 +21,15 @@ public class TaskRepository : ITaskRepository
             .ToList();
     }
 
+    public IReadOnlyList<Task> GetTasks(DateTime date)
+    {
+        return _dbContext.Tasks
+            .AsNoTracking()
+            .Where(t => t.CreatedOn.Date == date.Date)
+            .OrderBy(t => t.CreatedOn)
+            .ToList();
+    }
+
     public void AddTask(Task task)
     {
         _dbContext.Tasks.Add(task);
@@ -29,5 +38,10 @@ public class TaskRepository : ITaskRepository
     public void UpdateRange(IEnumerable<Task> tasks)
     {
         _dbContext.Tasks.UpdateRange(tasks);
+    }
+
+    public void RemoveTask(Task task)
+    {
+        _dbContext.Tasks.Remove(task);
     }
 }

@@ -12,8 +12,7 @@
         Title="Task Tracker"
         TransparencyLevelHint="AcrylicBlur"
         Background="Transparent"
-        ExtendClientAreaToDecorationsHint="False">
-    <!-- Content="{Binding ContentViewModel}"> -->
+        ExtendClientAreaToDecorationsHint="True">
 
     <Panel>
         <ExperimentalAcrylicBorder IsHitTestVisible="False">
@@ -25,7 +24,7 @@
                     MaterialOpacity="0.01" />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
-        <UserControl Content="{Binding ContentViewModel}"/>
+        <UserControl Content="{Binding ContentViewModel}" />
     </Panel>
 
 </Window>

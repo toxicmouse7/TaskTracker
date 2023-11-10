@@ -6,7 +6,16 @@
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
              x:Class="TaskTracker.Views.AddTaskView"
              x:DataType="viewModels:AddTaskViewModel">
-    <DockPanel>
+    <DockPanel Margin="0, 30, 0, 0">
+        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    BackgroundSource="Digger"
+                    TintColor="Black"
+                    TintOpacity="1"
+                    MaterialOpacity="0.80" />
+            </ExperimentalAcrylicBorder.Material>
+        </ExperimentalAcrylicBorder>
         <Button DockPanel.Dock="Bottom"
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Center"
@@ -20,6 +29,7 @@
             OK
         </Button>
         <TextBox Text="{Binding Content}"
-                 Watermark="Enter your to do item" />
+                 Watermark="Enter your task description"
+                 FontSize="24" />
     </DockPanel>
 </UserControl>

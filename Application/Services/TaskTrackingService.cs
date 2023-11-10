@@ -21,10 +21,16 @@ public class TaskTrackingService : ITaskTrackingService
         return _taskRepository.GetTasks();
     }
 
+    public IReadOnlyList<Task> GetTasks(DateTime date)
+    {
+        return _taskRepository.GetTasks(date);
+    }
+
     public void AddTask(Task task)
     {
         _taskRepository.AddTask(task);
         _unitOfWork.SaveChanges();
+        _unitOfWork.ChangeTracker.Clear();
     }
 
     public void TrackTask(ReactiveTask task, CancellationToken cancellationToken)
@@ -42,6 +48,13 @@ public class TaskTrackingService : ITaskTrackingService
     public void UpdateTasks(IEnumerable<ReactiveTask> reactiveTasks)
     {
         _taskRepository.UpdateRange(reactiveTasks.Select(t => t.ToTask()));
+        _unitOfWork.SaveChanges();
+        _unitOfWork.ChangeTracker.Clear();
+    }
+
+    public void RemoveTask(ReactiveTask task)
+    {
+        _taskRepository.RemoveTask(task.ToTask());
         _unitOfWork.SaveChanges();
     }
 }

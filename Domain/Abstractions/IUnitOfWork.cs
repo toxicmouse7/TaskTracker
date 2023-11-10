@@ -1,7 +1,10 @@
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+
 namespace Domain.Abstractions;
 
 public interface IUnitOfWork
 {
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-    int SaveChanges();
+    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+    public int SaveChanges();
+    public ChangeTracker ChangeTracker { get; }
 }

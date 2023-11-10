@@ -1,7 +1,6 @@
 ﻿using System.Reactive.Linq;
 using Application.Extensions;
 using Application.Services;
-using Domain.Abstractions;
 using Infrastructure.Repositories;
 using ReactiveUI;
 using Task = Domain.Entities.Tasks.Task;
@@ -10,8 +9,8 @@ namespace Application.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    private readonly ITaskTrackingService _taskTrackingService;
     private ViewModelBase _contentViewModel;
+    private DateTime _taskDate;
     private TaskListViewModel TaskListViewModel { get; }
 
     public ViewModelBase ContentViewModel
@@ -20,12 +19,9 @@ public class MainWindowViewModel : ViewModelBase
         private set => this.RaiseAndSetIfChanged(ref _contentViewModel, value);
     }
     
-    public MainWindowViewModel(
-        TaskListViewModel taskListView,
-        ITaskTrackingService taskTrackingService)
+    public MainWindowViewModel(TaskListViewModel taskListView)
     {
         TaskListViewModel = taskListView;
-        _taskTrackingService = taskTrackingService;
         _contentViewModel = TaskListViewModel;
     }
 
@@ -39,8 +35,7 @@ public class MainWindowViewModel : ViewModelBase
             {
                 if (newItem != null)
                 {
-                    _taskTrackingService.AddTask(newItem);
-                    TaskListViewModel.Tasks.Add(newItem.ToReactiveTask());
+                    TaskListViewModel.AddTask(newItem);
                 }
 
                 ContentViewModel = TaskListViewModel;
