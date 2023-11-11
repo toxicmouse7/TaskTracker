@@ -12,6 +12,8 @@
         Title="Task Tracker"
         TransparencyLevelHint="AcrylicBlur"
         Background="Transparent"
+        CanResize="False"
+        ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaToDecorationsHint="True">
 
     <Panel>
