@@ -13,6 +13,7 @@
         TransparencyLevelHint="AcrylicBlur"
         Background="Transparent"
         CanResize="False"
+        WindowStartupLocation="CenterScreen"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaToDecorationsHint="True">
 
