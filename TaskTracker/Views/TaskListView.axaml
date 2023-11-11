@@ -37,13 +37,21 @@
                             <DockPanel Margin="10" Background="Transparent">
                                 <DockPanel.ContextMenu>
                                     <ContextMenu>
+                                        <MenuItem Header="Edit"
+                                                  x:CompileBindings="False"
+                                                  Command="{Binding $parent[Window].DataContext.EditTaskCommand}"
+                                                  CommandParameter="{Binding}">
+                                            <MenuItem.Icon>
+                                                <PathIcon Data="{StaticResource edit_regular}" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
                                         <MenuItem x:CompileBindings="False"
                                                   IsEnabled="{Binding !IsTracked}"
                                                   Command="{Binding $parent[UserControl].DataContext.RemoveCommand}"
                                                   CommandParameter="{Binding}"
                                                   Header="Remove">
                                             <MenuItem.Icon>
-                                                <PathIcon Data="{StaticResource delete_regular}"></PathIcon>
+                                                <PathIcon Data="{StaticResource delete_regular}"/>
                                             </MenuItem.Icon>
                                         </MenuItem>
                                     </ContextMenu>

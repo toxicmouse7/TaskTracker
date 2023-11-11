@@ -6,6 +6,7 @@
         <entry key="TaskTracker/App.axaml" value="TaskTracker/TaskTracker.csproj" />
         <entry key="TaskTracker/Icons.axaml" value="TaskTracker/TaskTracker.csproj" />
         <entry key="TaskTracker/Views/AddTaskView.axaml" value="TaskTracker/TaskTracker.csproj" />
+        <entry key="TaskTracker/Views/EditTaskView.axaml" value="TaskTracker/TaskTracker.csproj" />
         <entry key="TaskTracker/Views/MainWindow.axaml" value="TaskTracker/TaskTracker.csproj" />
         <entry key="TaskTracker/Views/TaskList.axaml" value="TaskTracker/TaskTracker.csproj" />
         <entry key="TaskTracker/Views/TaskListView.axaml" value="TaskTracker/TaskTracker.csproj" />

@@ -10,4 +10,6 @@ public interface ITaskRepository
     public void AddTask(Task task);
     public void UpdateRange(IEnumerable<Task> tasks);
     public void RemoveTask(Task task);
+    public void Update(Task task);
+    public Task? GetTask(Guid id);
 }

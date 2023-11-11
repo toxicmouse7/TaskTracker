@@ -46,17 +46,17 @@ public class TaskListViewModel : ViewModelBase
         RemoveCommand = ReactiveCommand.Create<ReactiveTask>(RemoveTask);
 
         this.WhenValueChanged(x => x.TaskDate)
-            .Subscribe(SwitchDate);
+            .Subscribe(UpdateShowedTasksByDate);
     }
 
-    public void StartTracking(ReactiveTask task)
+    private void StartTracking(ReactiveTask task)
     {
         task.IsTracked = true;
         _taskTrackingService.TrackTask(task, _cancellationTokenSource.Token);
         IsTrackingAny = true;
     }
 
-    public void StopTracking(ReactiveTask task)
+    private void StopTracking(ReactiveTask task)
     {
         _cancellationTokenSource.Cancel();
         task.IsTracked = false;
@@ -65,13 +65,13 @@ public class TaskListViewModel : ViewModelBase
         _taskTrackingService.UpdateTasks(Tasks.ToList());
     }
 
-    public void RemoveTask(ReactiveTask task)
+    private void RemoveTask(ReactiveTask task)
     {
         _taskTrackingService.RemoveTask(task);
         Tasks.Remove(task);
     }
 
-    private void SwitchDate(DateTime date)
+    private void UpdateShowedTasksByDate(DateTime date)
     {
         Tasks.Clear();
         Tasks.AddRange(_taskTrackingService
@@ -84,5 +84,17 @@ public class TaskListViewModel : ViewModelBase
         task.CreatedOn = TaskDate;
         _taskTrackingService.AddTask(task);
         Tasks.Add(task.ToReactiveTask());
+    }
+
+    public void EditTask(Guid taskId, string newContent)
+    {
+        var task = _taskTrackingService.GetTaskById(taskId);
+        if (task is null)
+            return;
+        
+        task.Content = newContent;
+        _taskTrackingService.UpdateTask(task);
+        
+        UpdateShowedTasksByDate(TaskDate);
     }
 }

@@ -44,4 +44,14 @@ public class TaskRepository : ITaskRepository
     {
         _dbContext.Tasks.Remove(task);
     }
+
+    public void Update(Task task)
+    {
+        _dbContext.Tasks.Update(task);
+    }
+
+    public Task? GetTask(Guid id)
+    {
+        return _dbContext.Tasks.FirstOrDefault(t => t.Id == id);
+    }
 }

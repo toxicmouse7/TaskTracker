@@ -16,6 +16,11 @@ public class TaskTrackingService : ITaskTrackingService
         _unitOfWork = unitOfWork;
     }
 
+    public Task? GetTaskById(Guid id)
+    {
+        return _taskRepository.GetTask(id);
+    }
+
     public IReadOnlyList<Task> GetTasks()
     {
         return _taskRepository.GetTasks();
@@ -44,10 +49,23 @@ public class TaskTrackingService : ITaskTrackingService
             }
         }, cancellationToken);
     }
+    
 
     public void UpdateTasks(IEnumerable<ReactiveTask> reactiveTasks)
     {
         _taskRepository.UpdateRange(reactiveTasks.Select(t => t.ToTask()));
+        _unitOfWork.SaveChanges();
+        _unitOfWork.ChangeTracker.Clear();
+    }
+
+    public void UpdateTask(ReactiveTask reactiveTask)
+    {
+        UpdateTask(reactiveTask.ToTask());
+    }
+
+    public void UpdateTask(Task task)
+    {
+        _taskRepository.Update(task);
         _unitOfWork.SaveChanges();
         _unitOfWork.ChangeTracker.Clear();
     }
