@@ -8,16 +8,24 @@
              x:Class="TaskTracker.Views.TaskListView">
     <DockPanel>
         <Panel DockPanel.Dock="Top">
+            <Button HorizontalAlignment="Left"
+                    Margin="10,0,0,0"
+                    Background="Transparent"
+                    x:CompileBindings="False"
+                    Command="{Binding $parent[UserControl].ExportToClipboard}"
+                    IsEnabled="{Binding !IsTrackingAny}">
+                <PathIcon Data="{StaticResource export_regular}" />
+            </Button>
             <CalendarDatePicker HorizontalAlignment="Center"
                                 Margin="10"
                                 SelectedDateFormat="Custom"
                                 CustomDateFormatString="ddd, d MMMM"
                                 SelectedDate="{Binding TaskDate}" />
-            <Button HorizontalAlignment="Right" 
+            <Button HorizontalAlignment="Right"
                     Background="Transparent"
                     Margin="0,0,5,0"
                     Command="{Binding $parent[Window].Close}">
-                <PathIcon Data="{StaticResource CloseWindow}"/>
+                <PathIcon Data="{StaticResource CloseWindow}" />
             </Button>
         </Panel>
         <DockPanel>
@@ -58,7 +66,7 @@
                                                   CommandParameter="{Binding}"
                                                   Header="Remove">
                                             <MenuItem.Icon>
-                                                <PathIcon Data="{StaticResource delete_regular}"/>
+                                                <PathIcon Data="{StaticResource delete_regular}" />
                                             </MenuItem.Icon>
                                         </MenuItem>
                                     </ContextMenu>

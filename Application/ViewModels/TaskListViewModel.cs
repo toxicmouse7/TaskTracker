@@ -23,6 +23,7 @@ namespace Application.ViewModels;
 public class TaskListViewModel : ViewModelBase
 {
     private readonly ISender _sender;
+
     // private readonly ITaskTrackingService _taskTrackingService;
     private CancellationTokenSource _cancellationTokenSource = new();
     private bool _isTrackingAny;
@@ -33,7 +34,7 @@ public class TaskListViewModel : ViewModelBase
         get => _isTrackingAny;
         set => this.RaiseAndSetIfChanged(ref _isTrackingAny, value);
     }
-    
+
     public DateTime TaskDate
     {
         get => _taskDate;
@@ -50,11 +51,11 @@ public class TaskListViewModel : ViewModelBase
         _sender = sender;
         Tasks = new ObservableCollection<ReactiveTask>();
         _taskDate = DateTime.Today;
-        
+
         StartTrackingCommand = ReactiveCommand.CreateFromTask<ReactiveTask>(StartTracking);
         StopTrackingCommand = ReactiveCommand.CreateFromTask<ReactiveTask>(StopTracking);
         RemoveCommand = ReactiveCommand.CreateFromTask<ReactiveTask>(RemoveTask);
-        
+
         this.WhenValueChanged(x => x.TaskDate)
             .Subscribe(date => UpdateShowedTasksByDate(date).Wait());
     }
@@ -90,7 +91,7 @@ public class TaskListViewModel : ViewModelBase
     {
         var listTasksByDateQuery = new ListTasksByDateQuery(date);
         var tasks = await _sender.Send(listTasksByDateQuery);
-        
+
         Tasks.Clear();
         Tasks.AddRange(tasks.Select(t => t.ToReactiveTask()));
     }
@@ -100,7 +101,7 @@ public class TaskListViewModel : ViewModelBase
         trackedTask.CreatedOn = TaskDate;
         var createTrackedTaskCommand = new CreateTrackedTaskCommand(trackedTask);
         await _sender.Send(createTrackedTaskCommand);
-        
+
         Tasks.Add(trackedTask.ToReactiveTask());
     }
 
@@ -109,5 +110,16 @@ public class TaskListViewModel : ViewModelBase
         var updateTrackedTaskCommand = new UpdateTrackedTaskCommand(taskId, newContent);
         await _sender.Send(updateTrackedTaskCommand);
         await UpdateShowedTasksByDate(TaskDate);
+    }
+
+    public async Task<string> GetExportString()
+    {
+        var listTasksByDateQuery = new ListTasksByDateQuery(TaskDate);
+        var tasks = (await _sender.Send(listTasksByDateQuery)).ToList();
+
+        return string.Join('\n', tasks.Select(t =>
+            $"{t.Content}," +
+            $" - {Math.Round(t.TimeWasted.TotalHours, 2)}"),
+            $"Total: {Math.Round(tasks.Sum(t => t.TimeWasted.TotalHours), 2)}");
     }
 }
