@@ -16,7 +16,7 @@
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaToDecorationsHint="True">
 
-    <Panel>
+    <DockPanel>
         <ExperimentalAcrylicBorder IsHitTestVisible="False">
             <ExperimentalAcrylicBorder.Material>
                 <ExperimentalAcrylicMaterial
@@ -27,6 +27,6 @@
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
         <UserControl Content="{Binding ContentViewModel}" />
-    </Panel>
+    </DockPanel>
 
 </Window>
