@@ -1,11 +1,8 @@
 ﻿using System.Reactive;
 using System.Reactive.Linq;
-using Application.Extensions;
-using Application.Services;
+using Domain.Entities.Tasks;
 using Domain.ReactiveEntities;
-using Infrastructure.Repositories;
 using ReactiveUI;
-using Task = Domain.Entities.Tasks.Task;
 
 namespace Application.ViewModels;
 
@@ -42,7 +39,7 @@ public class MainWindowViewModel : ViewModelBase
             {
                 if (newContent != null)
                 {
-                    TaskListViewModel.EditTask(reactiveTask.Id, newContent);
+                    TaskListViewModel.EditTask(reactiveTask.Id, newContent).Wait();
                 }
         
                 ContentViewModel = TaskListViewModel;
@@ -57,13 +54,13 @@ public class MainWindowViewModel : ViewModelBase
 
         addTaskViewModel.OkCommand.Merge(addTaskViewModel
                 .CancelCommand
-                .Select(_ => (Task?)null))
+                .Select(_ => (TrackedTask?)null))
             .Take(1)
             .Subscribe(newItem =>
             {
                 if (newItem != null)
                 {
-                    TaskListViewModel.AddTask(newItem);
+                    TaskListViewModel.AddTrackedTask(newItem).Wait();
                 }
 
                 ContentViewModel = TaskListViewModel;

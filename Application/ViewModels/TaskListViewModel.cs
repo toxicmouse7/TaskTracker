@@ -1,19 +1,29 @@
 ﻿using System.Collections.ObjectModel;
-using System.Reactive;
 using Application.Extensions;
+using Application.Tasks.Create;
+using Application.Tasks.ListByDate;
+using Application.TrackedTasks.Create;
+using Application.TrackedTasks.Get;
+using Application.TrackedTasks.Remove;
+using Application.TrackedTasks.Track;
+using Application.TrackedTasks.Update;
+using Application.TrackedTasks.UpdateRange;
 using Domain.Abstractions;
+using Domain.Entities.Tasks;
 using Domain.ReactiveEntities;
 using DynamicData;
 using DynamicData.Binding;
+using MediatR;
 using ReactiveUI;
-using Task = Domain.Entities.Tasks.Task;
+using Unit = System.Reactive.Unit;
 
 
 namespace Application.ViewModels;
 
 public class TaskListViewModel : ViewModelBase
 {
-    private readonly ITaskTrackingService _taskTrackingService;
+    private readonly ISender _sender;
+    // private readonly ITaskTrackingService _taskTrackingService;
     private CancellationTokenSource _cancellationTokenSource = new();
     private bool _isTrackingAny;
     private DateTime _taskDate;
@@ -35,66 +45,69 @@ public class TaskListViewModel : ViewModelBase
     public ReactiveCommand<ReactiveTask, Unit> StopTrackingCommand { get; }
     public ReactiveCommand<ReactiveTask, Unit> RemoveCommand { get; }
 
-    public TaskListViewModel(ITaskTrackingService taskTrackingService)
+    public TaskListViewModel(ISender sender)
     {
-        _taskTrackingService = taskTrackingService;
+        _sender = sender;
         Tasks = new ObservableCollection<ReactiveTask>();
         _taskDate = DateTime.Today;
-
-        StartTrackingCommand = ReactiveCommand.Create<ReactiveTask>(StartTracking);
-        StopTrackingCommand = ReactiveCommand.Create<ReactiveTask>(StopTracking);
-        RemoveCommand = ReactiveCommand.Create<ReactiveTask>(RemoveTask);
-
+        
+        StartTrackingCommand = ReactiveCommand.CreateFromTask<ReactiveTask>(StartTracking);
+        StopTrackingCommand = ReactiveCommand.CreateFromTask<ReactiveTask>(StopTracking);
+        RemoveCommand = ReactiveCommand.CreateFromTask<ReactiveTask>(RemoveTask);
+        
         this.WhenValueChanged(x => x.TaskDate)
-            .Subscribe(UpdateShowedTasksByDate);
+            .Subscribe(date => UpdateShowedTasksByDate(date).Wait());
     }
 
-    private void StartTracking(ReactiveTask task)
+    private async Task StartTracking(ReactiveTask task)
     {
-        task.IsTracked = true;
-        _taskTrackingService.TrackTask(task, _cancellationTokenSource.Token);
+        var trackTaskCommand = new TrackTaskCommand(task, _cancellationTokenSource.Token);
+        await _sender.Send(trackTaskCommand);
         IsTrackingAny = true;
     }
 
-    private void StopTracking(ReactiveTask task)
+    private async Task StopTracking(ReactiveTask task)
     {
         _cancellationTokenSource.Cancel();
         task.IsTracked = false;
         IsTrackingAny = false;
         _cancellationTokenSource = new CancellationTokenSource();
-        _taskTrackingService.UpdateTasks(Tasks.ToList());
+
+        var updateTrackedTasksCommand = new UpdateTrackedTasksCommand(Tasks
+            .Select(t => t.ToTask())
+            .ToList());
+        await _sender.Send(updateTrackedTasksCommand);
     }
 
-    private void RemoveTask(ReactiveTask task)
+    private async Task RemoveTask(ReactiveTask task)
     {
-        _taskTrackingService.RemoveTask(task);
+        var removeTrackedTaskCommand = new RemoveTrackedTaskCommand(task.Id);
+        await _sender.Send(removeTrackedTaskCommand);
         Tasks.Remove(task);
     }
 
-    private void UpdateShowedTasksByDate(DateTime date)
+    private async Task UpdateShowedTasksByDate(DateTime date)
     {
+        var listTasksByDateQuery = new ListTasksByDateQuery(date);
+        var tasks = await _sender.Send(listTasksByDateQuery);
+        
         Tasks.Clear();
-        Tasks.AddRange(_taskTrackingService
-            .GetTasks(date)
-            .Select(t => t.ToReactiveTask()));
+        Tasks.AddRange(tasks.Select(t => t.ToReactiveTask()));
     }
 
-    public void AddTask(Task task)
+    public async Task AddTrackedTask(TrackedTask trackedTask)
     {
-        task.CreatedOn = TaskDate;
-        _taskTrackingService.AddTask(task);
-        Tasks.Add(task.ToReactiveTask());
+        trackedTask.CreatedOn = TaskDate;
+        var createTrackedTaskCommand = new CreateTrackedTaskCommand(trackedTask);
+        await _sender.Send(createTrackedTaskCommand);
+        
+        Tasks.Add(trackedTask.ToReactiveTask());
     }
 
-    public void EditTask(Guid taskId, string newContent)
+    public async Task EditTask(Guid taskId, string newContent)
     {
-        var task = _taskTrackingService.GetTaskById(taskId);
-        if (task is null)
-            return;
-        
-        task.Content = newContent;
-        _taskTrackingService.UpdateTask(task);
-        
-        UpdateShowedTasksByDate(TaskDate);
+        var updateTrackedTaskCommand = new UpdateTrackedTaskCommand(taskId, newContent);
+        await _sender.Send(updateTrackedTaskCommand);
+        await UpdateShowedTasksByDate(TaskDate);
     }
 }

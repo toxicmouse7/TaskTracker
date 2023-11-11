@@ -1,15 +1,13 @@
+using Domain.Entities.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Task = Domain.Entities.Tasks.Task;
 
 namespace Infrastructure.Configurations;
 
-public class TaskConfiguration : IEntityTypeConfiguration<Task>
+public class TaskConfiguration : IEntityTypeConfiguration<TrackedTask>
 {
-    public void Configure(EntityTypeBuilder<Task> builder)
+    public void Configure(EntityTypeBuilder<TrackedTask> builder)
     {
-        builder.HasData(
-            new Task(Guid.NewGuid(), "Task 1"),
-            new Task(Guid.NewGuid(), "Task 2"));
+        
     }
 }

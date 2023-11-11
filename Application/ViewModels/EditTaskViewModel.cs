@@ -1,7 +1,6 @@
 using System.Reactive;
 using Domain.ReactiveEntities;
 using ReactiveUI;
-using Task = Domain.Entities.Tasks.Task;
 
 namespace Application.ViewModels;
 

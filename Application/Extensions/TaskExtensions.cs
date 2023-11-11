@@ -1,17 +1,17 @@
+using Domain.Entities.Tasks;
 using Domain.ReactiveEntities;
-using Task = Domain.Entities.Tasks.Task;
 
 namespace Application.Extensions;
 
 public static class TaskExtensions
 {
-    public static Task ToTask(this ReactiveTask reactiveTask)
+    public static TrackedTask ToTask(this ReactiveTask reactiveTask)
     {
-        return new Task(reactiveTask.Id, reactiveTask.Content, reactiveTask.TimeWasted);
+        return new TrackedTask(reactiveTask.Id, reactiveTask.Content, reactiveTask.TimeWasted);
     }
 
-    public static ReactiveTask ToReactiveTask(this Task task)
+    public static ReactiveTask ToReactiveTask(this TrackedTask trackedTask)
     {
-        return new ReactiveTask(task.Id, task.Content, task.TimeWasted);
+        return new ReactiveTask(trackedTask.Id, trackedTask.Content, trackedTask.TimeWasted);
     }
 }

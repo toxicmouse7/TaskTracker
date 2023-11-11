@@ -6,18 +6,17 @@ namespace TaskTracker;
 
 public static class DependencyInjection
 {
-    public static IServiceProvider GetServiceProvider(this IResourceHost control)
+    private static IServiceProvider GetServiceProvider(this IResourceHost control)
     {
-        var test = control.FindResource(typeof(IServiceProvider))!;
-        return (IServiceProvider)test;
+        return (IServiceProvider)control.FindResource(typeof(IServiceProvider))!;
     }
 
     public static T CreateInstance<T>(this IResourceHost control)
     {
         return (T)control.CreateInstance(typeof(T));
     }
-    
-    public static object CreateInstance(this IResourceHost control, Type type)
+
+    private static object CreateInstance(this IResourceHost control, Type type)
     {
         return ActivatorUtilities.CreateInstance(control.GetServiceProvider(), type);
     }

@@ -5,7 +5,7 @@
       <map>
         <entry key="Common:117a3df1-e549-4e6e-9874-8ea7bf25eb8d:dbContext" value="Infrastructure.ApplicationDbContext" />
         <entry key="Common:buildConfiguration" value="Debug" />
-        <entry key="Common:noBuild" value="false" />
+        <entry key="Common:noBuild" value="true" />
         <entry key="Common:outputFolder" value="Migrations" />
         <entry key="Common:useDefaultConnection" value="false" />
       </map>

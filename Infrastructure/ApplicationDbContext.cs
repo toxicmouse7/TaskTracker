@@ -1,6 +1,6 @@
 using Domain.Abstractions;
+using Domain.Entities.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Task = Domain.Entities.Tasks.Task;
 
 namespace Infrastructure;
 
@@ -15,5 +15,5 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext, IUn
     protected override void OnModelCreating(ModelBuilder modelBuilder)
         => modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
-    public DbSet<Task> Tasks { get; set; } = null!;
+    public DbSet<TrackedTask> Tasks { get; set; } = null!;
 }

@@ -1,6 +1,6 @@
 ﻿using System.Reactive;
+using Domain.Entities.Tasks;
 using ReactiveUI;
-using Task = Domain.Entities.Tasks.Task;
 
 namespace Application.ViewModels;
 
@@ -13,7 +13,7 @@ public class AddTaskViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _content, value);
     }
     
-    public ReactiveCommand<Unit, Task> OkCommand { get; }
+    public ReactiveCommand<Unit, TrackedTask> OkCommand { get; }
     public ReactiveCommand<Unit, Unit> CancelCommand { get; }
         
     public AddTaskViewModel()
@@ -23,7 +23,7 @@ public class AddTaskViewModel : ViewModelBase
             x => !string.IsNullOrWhiteSpace(x));
 
         OkCommand = ReactiveCommand.Create(
-            () => new Task(Guid.NewGuid(), Content), isValidObservable);
+            () => new TrackedTask(Guid.NewGuid(), Content), isValidObservable);
         CancelCommand = ReactiveCommand.Create(() => { });
     }
 }

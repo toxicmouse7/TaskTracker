@@ -36,22 +36,6 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tasks");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("2da35c41-7a77-4613-a08e-5df71b92bee6"),
-                            Content = "Task 1",
-                            CreatedOn = new DateTime(2023, 11, 5, 0, 0, 0, 0, DateTimeKind.Local),
-                            TimeWasted = new TimeSpan(0, 0, 0, 0, 0)
-                        },
-                        new
-                        {
-                            Id = new Guid("0e10cf5e-d56d-4086-b592-95f72f70dc34"),
-                            Content = "Task 2",
-                            CreatedOn = new DateTime(2023, 11, 5, 0, 0, 0, 0, DateTimeKind.Local),
-                            TimeWasted = new TimeSpan(0, 0, 0, 0, 0)
-                        });
                 });
 #pragma warning restore 612, 618
         }

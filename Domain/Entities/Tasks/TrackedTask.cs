@@ -2,14 +2,14 @@
 
 namespace Domain.Entities.Tasks;
 
-public class Task : Entity<Guid>
+public class TrackedTask : Entity<Guid>
 {
-    public Task(Guid id, string content)
+    public TrackedTask(Guid id, string content)
         : this(id, content, TimeSpan.Zero)
     {
     }
 
-    public Task(Guid id, string content, TimeSpan timeWasted)
+    public TrackedTask(Guid id, string content, TimeSpan timeWasted)
     {
         Id = id;
         Content = content;
