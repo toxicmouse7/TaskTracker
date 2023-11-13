@@ -117,9 +117,12 @@ public class TaskListViewModel : ViewModelBase
         var listTasksByDateQuery = new ListTasksByDateQuery(TaskDate);
         var tasks = (await _sender.Send(listTasksByDateQuery)).ToList();
 
-        return string.Join('\n', tasks.Select(t =>
+        var exportStrings = tasks.Select(t =>
             $"{t.Content}," +
-            $" - {Math.Round(t.TimeWasted.TotalHours, 2)}"),
-            $"Total: {Math.Round(tasks.Sum(t => t.TimeWasted.TotalHours), 2)}");
+            $" - {Math.Round(t.TimeWasted.TotalHours, 2)}").ToList();
+        
+        exportStrings.Add($"Total: {Math.Round(tasks.Sum(t => t.TimeWasted.TotalHours), 2)}");
+
+        return string.Join('\n', exportStrings);
     }
 }
