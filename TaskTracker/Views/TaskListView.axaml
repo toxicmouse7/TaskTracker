@@ -47,7 +47,8 @@
                     Command="{Binding $parent[Window].DataContext.AddTask}">
                 Add Task
             </Button>
-            <ItemsControl ItemsSource="{Binding Tasks}">
+            <ScrollViewer>
+                <ItemsControl ItemsSource="{Binding Tasks}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border CornerRadius="15" BorderBrush="Gray" BorderThickness="2">
@@ -105,6 +106,7 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+            </ScrollViewer>
         </DockPanel>
     </DockPanel>
 </UserControl>
