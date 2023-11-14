@@ -18,6 +18,7 @@ public class ListTasksByDateQueryHandler : IRequestHandler<ListTasksByDateQuery,
     {
         return await _applicationDbContext.Tasks
             .AsNoTracking()
+            .Where(t => t.CreatedOn.Date == request.TaskDate.Date)
             .ToListAsync(cancellationToken: cancellationToken);
     }
 }
