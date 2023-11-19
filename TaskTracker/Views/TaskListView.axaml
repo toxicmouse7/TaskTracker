@@ -26,20 +26,30 @@
                     x:CompileBindings="False"
                     Command="{Binding $parent[UserControl].ExportToClipboard}"
                     IsEnabled="{Binding !IsTrackingAny}">
-                <PathIcon Data="{StaticResource export_regular}" />
+                <PathIcon Data="{StaticResource ExportRegular}" />
             </Button>
             <CalendarDatePicker HorizontalAlignment="Center"
                                 Margin="10"
                                 SelectedDateFormat="Custom"
                                 CustomDateFormatString="ddd, d MMMM"
                                 SelectedDate="{Binding TaskDate}" />
-            <Button HorizontalAlignment="Right"
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button 
+                    x:CompileBindings="False"
                     Background="Transparent"
                     Margin="0,0,5,0"
-                    ToolTip.Tip="Close"
-                    Command="{Binding $parent[Window].Close}">
-                <PathIcon Data="{StaticResource CloseWindow}" />
-            </Button>
+                    ToolTip.Tip="Hide"
+                    Command="{Binding $parent[Window].Minimize}">
+                    <PathIcon Data="{StaticResource MinimizeWindow}" />
+                </Button>
+                <Button 
+                        Background="Transparent"
+                        Margin="0,0,5,0"
+                        ToolTip.Tip="Close"
+                        Command="{Binding $parent[Window].Close}">
+                    <PathIcon Data="{StaticResource CloseWindow}" />
+                </Button>
+            </StackPanel>
         </Panel>
         <DockPanel>
             <Button DockPanel.Dock="Bottom"
@@ -62,7 +72,7 @@
                                                   Command="{Binding $parent[Window].DataContext.EditTaskCommand}"
                                                   CommandParameter="{Binding}">
                                             <MenuItem.Icon>
-                                                <PathIcon Data="{StaticResource edit_regular}" />
+                                                <PathIcon Data="{StaticResource EditRegular}" />
                                             </MenuItem.Icon>
                                         </MenuItem>
                                         <MenuItem x:CompileBindings="False"
@@ -71,7 +81,7 @@
                                                   CommandParameter="{Binding}"
                                                   Header="Remove">
                                             <MenuItem.Icon>
-                                                <PathIcon Data="{StaticResource delete_regular}" />
+                                                <PathIcon Data="{StaticResource DeleteRegular}" />
                                             </MenuItem.Icon>
                                         </MenuItem>
                                     </ContextMenu>
@@ -92,7 +102,7 @@
                                         IsVisible="{Binding !IsTracked}"
                                         Command="{Binding Path=DataContext.StartTrackingCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                         CommandParameter="{Binding}">
-                                        <PathIcon Data="{StaticResource play_circle_regular}" />
+                                        <PathIcon Data="{StaticResource PlayCircleRegular}" />
                                     </Button>
                                     <Button
                                         x:CompileBindings="False"
@@ -100,7 +110,7 @@
                                         IsVisible="{Binding IsTracked}"
                                         Command="{Binding Path=DataContext.StopTrackingCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                         CommandParameter="{Binding}">
-                                        <PathIcon Data="{StaticResource pause_regular}" />
+                                        <PathIcon Data="{StaticResource PauseRegular}" />
                                     </Button>
                                 </StackPanel>
                             </DockPanel>
