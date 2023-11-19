@@ -11,23 +11,23 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="Task Tracker"
         TransparencyLevelHint="AcrylicBlur"
-        Background="Transparent"
         CanResize="False"
         WindowStartupLocation="CenterScreen"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaToDecorationsHint="True">
 
     <DockPanel>
-        <ExperimentalAcrylicBorder IsHitTestVisible="False">
+        <ExperimentalAcrylicBorder IsHitTestVisible="True">
             <ExperimentalAcrylicBorder.Material>
                 <ExperimentalAcrylicMaterial
                     BackgroundSource="Digger"
                     TintColor="Black"
                     TintOpacity="1"
-                    MaterialOpacity="0.01" />
+                    PlatformTransparencyCompensationLevel="1"
+                    MaterialOpacity="0.5" />
             </ExperimentalAcrylicBorder.Material>
+            <UserControl Content="{Binding ContentViewModel}" />
         </ExperimentalAcrylicBorder>
-        <UserControl Content="{Binding ContentViewModel}" />
     </DockPanel>
 
 </Window>
