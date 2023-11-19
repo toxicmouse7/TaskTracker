@@ -112,16 +112,36 @@ public class TaskListViewModel : ViewModelBase
         await UpdateShowedTasksByDate(TaskDate);
     }
 
+    private static IEnumerable<double> AdjustTimeToTarget(IEnumerable<TrackedTask> tasks, double target)
+    {
+        var currentSpentTime = tasks
+            .Select(t => t.TimeWasted.TotalHours)
+            .ToList();
+
+        var totalSpentTime = currentSpentTime.Sum();
+        var unspentTime = target - totalSpentTime;
+
+        return (from spentTime in currentSpentTime
+            let proportion = spentTime / totalSpentTime
+            let adjustedTime = unspentTime * proportion
+            select spentTime + adjustedTime).ToList();
+    }
+
     public async Task<string> GetExportString()
     {
         var listTasksByDateQuery = new ListTasksByDateQuery(TaskDate);
         var tasks = (await _sender.Send(listTasksByDateQuery)).ToList();
 
-        var exportStrings = tasks.Select(t =>
-            $"{t.Content}," +
-            $" - {Math.Round(t.TimeWasted.TotalHours, 2)}").ToList();
-        
-        exportStrings.Add($"Total: {Math.Round(tasks.Sum(t => t.TimeWasted.TotalHours), 2)}");
+        var adjustedTime = AdjustTimeToTarget(tasks, 8).ToList();
+
+        var exportStrings = tasks
+            .Zip(adjustedTime)
+            .Select(pair =>
+                $"{pair.First.Content}," +
+                $" - {Math.Round(pair.Second, 2)}")
+            .ToList();
+
+        exportStrings.Add($"Total: {Math.Round(adjustedTime.Sum(), 2)}");
 
         return string.Join('\n', exportStrings);
     }
