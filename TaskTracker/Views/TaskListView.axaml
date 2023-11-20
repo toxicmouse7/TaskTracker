@@ -89,12 +89,14 @@
                                         </ContextMenu>
                                     </DockPanel.ContextMenu>
                                     <TextBlock HorizontalAlignment="Left"
+                                               Foreground="WhiteSmoke"
                                                FontSize="24"
                                                MaxWidth="215"
                                                TextTrimming="CharacterEllipsis"
                                                Text="{Binding Content}" />
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                         <TextBlock FontSize="24"
+                                                   Foreground="WhiteSmoke"
                                                    Text="{Binding TimeWasted}"
                                                    Padding="0,0,15,0" />
                                         <Button
