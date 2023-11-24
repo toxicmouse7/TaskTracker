@@ -6,26 +6,40 @@ namespace Application.ViewModels;
 
 public class EditTaskViewModel : ViewModelBase
 {
-    private string _content = null!;
-    public string Content 
-    { 
-        get => _content;
-        set => this.RaiseAndSetIfChanged(ref _content, value);
+    private string _taskContent = null!;
+    private string _timeWasted = null!;
+
+    public string TaskContent
+    {
+        get => _taskContent;
+        set => this.RaiseAndSetIfChanged(ref _taskContent, value);
     }
-    
-    public ReactiveCommand<Unit, string> OkCommand { get; }
+
+    public string TimeWasted
+    {
+        get => _timeWasted;
+        set => this.RaiseAndSetIfChanged(ref _timeWasted, value);
+    }
+
+    public ReactiveCommand<Unit, EditResult> OkCommand { get; }
     public ReactiveCommand<Unit, Unit> CancelCommand { get; }
-        
+
     public EditTaskViewModel(ReactiveTask reactiveTask)
     {
-        Content = reactiveTask.Content;
-        
+        TaskContent = reactiveTask.Content;
+        TimeWasted = reactiveTask.TimeWasted.ToString().Replace(":", " : ");
+
         var isValidObservable = this.WhenAnyValue(
-            x => x.Content,
-            x => !string.IsNullOrWhiteSpace(x));
+            x => x.TaskContent,
+            x => x.TimeWasted,
+            (content, timeWasted) => !string.IsNullOrWhiteSpace(content) &&
+                                     TimeSpan.TryParse(timeWasted.Replace(" ", string.Empty), out _));
 
         OkCommand = ReactiveCommand.Create(
-            () => Content, isValidObservable);
+            () => new EditResult(TaskContent, TimeSpan.Parse(TimeWasted.Replace(" ", string.Empty))),
+            isValidObservable);
         CancelCommand = ReactiveCommand.Create(() => { });
     }
+
+    public record EditResult(string Content, TimeSpan TimeWasted);
 }

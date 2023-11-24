@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Application.ViewModels;assembly=Application"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
              x:Class="TaskTracker.Views.EditTaskView"
              x:DataType="vm:EditTaskViewModel">
     <DockPanel Margin="0, 30, 0, 0">
@@ -28,8 +28,16 @@
                 Command="{Binding OkCommand}">
             OK
         </Button>
-        <TextBox Text="{Binding Content}"
-                 Watermark="Enter your task description"
-                 FontSize="24" />
+        <Grid RowDefinitions="*, Auto">
+            <TextBox Grid.Row="0"
+                     Text="{Binding TaskContent}"
+                     Watermark="Enter your task description"
+                     FontSize="24" />
+            <MaskedTextBox Grid.Row="1"
+                           FontSize="18"
+                           HorizontalContentAlignment="Center"
+                           Mask="09 : 09 : 09"
+                           Text="{Binding TimeWasted}"></MaskedTextBox>
+        </Grid>
     </DockPanel>
 </UserControl>

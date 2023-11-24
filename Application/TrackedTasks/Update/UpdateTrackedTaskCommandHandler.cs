@@ -26,6 +26,7 @@ public class UpdateTrackedTaskCommandHandler : IRequestHandler<UpdateTrackedTask
             return;
 
         task.Content = request.NewContent;
+        task.TimeWasted = request.NewTimeWasted;
         _trackedTaskRepository.Update(task);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken: cancellationToken);

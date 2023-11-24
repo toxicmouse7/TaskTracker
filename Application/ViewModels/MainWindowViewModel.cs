@@ -33,13 +33,13 @@ public class MainWindowViewModel : ViewModelBase
         
         editTaskViewModel.OkCommand.Merge(editTaskViewModel
                 .CancelCommand
-                .Select(_ => (string?)null))
+                .Select(_ => (EditTaskViewModel.EditResult?)null))
             .Take(1)
-            .Subscribe(newContent =>
+            .Subscribe(editResult =>
             {
-                if (newContent != null)
+                if (editResult != null)
                 {
-                    TaskListViewModel.EditTask(reactiveTask.Id, newContent).Wait();
+                    TaskListViewModel.EditTask(reactiveTask.Id, editResult.Content, editResult.TimeWasted).Wait();
                 }
         
                 ContentViewModel = TaskListViewModel;

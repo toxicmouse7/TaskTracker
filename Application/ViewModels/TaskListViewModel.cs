@@ -105,9 +105,9 @@ public class TaskListViewModel : ViewModelBase
         Tasks.Add(trackedTask.ToReactiveTask());
     }
 
-    public async Task EditTask(Guid taskId, string newContent)
+    public async Task EditTask(Guid taskId, string newContent, TimeSpan newTimeWasted)
     {
-        var updateTrackedTaskCommand = new UpdateTrackedTaskCommand(taskId, newContent);
+        var updateTrackedTaskCommand = new UpdateTrackedTaskCommand(taskId, newContent, newTimeWasted);
         await _sender.Send(updateTrackedTaskCommand);
         await UpdateShowingTasksByDate(TaskDate);
     }
