@@ -1,14 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using Application.Extensions;
-using Application.Tasks.Create;
 using Application.Tasks.ListByDate;
 using Application.TrackedTasks.Create;
-using Application.TrackedTasks.Get;
 using Application.TrackedTasks.Remove;
 using Application.TrackedTasks.Track;
 using Application.TrackedTasks.Update;
 using Application.TrackedTasks.UpdateRange;
-using Domain.Abstractions;
 using Domain.Entities.Tasks;
 using Domain.ReactiveEntities;
 using DynamicData;
@@ -24,15 +21,14 @@ public class TaskListViewModel : ViewModelBase
 {
     private readonly ISender _sender;
 
-    // private readonly ITaskTrackingService _taskTrackingService;
     private CancellationTokenSource _cancellationTokenSource = new();
-    private bool _isTrackingAny;
+    private ReactiveTask? _trackedTask;
     private DateTime _taskDate;
 
-    public bool IsTrackingAny
+    public ReactiveTask? TrackedTask
     {
-        get => _isTrackingAny;
-        set => this.RaiseAndSetIfChanged(ref _isTrackingAny, value);
+        get => _trackedTask;
+        set => this.RaiseAndSetIfChanged(ref _trackedTask, value);
     }
 
     public DateTime TaskDate
@@ -57,21 +53,22 @@ public class TaskListViewModel : ViewModelBase
         RemoveCommand = ReactiveCommand.CreateFromTask<ReactiveTask>(RemoveTask);
 
         this.WhenValueChanged(x => x.TaskDate)
-            .Subscribe(date => UpdateShowedTasksByDate(date).Wait());
+            .Subscribe(date => UpdateShowingTasksByDate(date).Wait());
     }
 
     private async Task StartTracking(ReactiveTask task)
     {
         var trackTaskCommand = new TrackTaskCommand(task, _cancellationTokenSource.Token);
         await _sender.Send(trackTaskCommand);
-        IsTrackingAny = true;
+        // IsTrackingAny = true;
+        TrackedTask = task;
     }
 
     private async Task StopTracking(ReactiveTask task)
     {
-        _cancellationTokenSource.Cancel();
+        await _cancellationTokenSource.CancelAsync();
         task.IsTracked = false;
-        IsTrackingAny = false;
+        TrackedTask = null!;
         _cancellationTokenSource = new CancellationTokenSource();
 
         var updateTrackedTasksCommand = new UpdateTrackedTasksCommand(Tasks
@@ -87,13 +84,16 @@ public class TaskListViewModel : ViewModelBase
         Tasks.Remove(task);
     }
 
-    private async Task UpdateShowedTasksByDate(DateTime date)
+    private async Task UpdateShowingTasksByDate(DateTime date)
     {
         var listTasksByDateQuery = new ListTasksByDateQuery(date);
         var tasks = await _sender.Send(listTasksByDateQuery);
 
         Tasks.Clear();
-        Tasks.AddRange(tasks.Select(t => t.ToReactiveTask()));
+        Tasks.AddRange(tasks.OrderBy(t => t.CreatedOn).Select(t => t.ToReactiveTask()));
+
+        if (TrackedTask is not null && TrackedTask.CreatedOn.Date == TaskDate.Date)
+            Tasks.ReplaceOrAdd(Tasks.First(t => t.Id == TrackedTask.Id), TrackedTask);
     }
 
     public async Task AddTrackedTask(TrackedTask trackedTask)
@@ -109,7 +109,7 @@ public class TaskListViewModel : ViewModelBase
     {
         var updateTrackedTaskCommand = new UpdateTrackedTaskCommand(taskId, newContent);
         await _sender.Send(updateTrackedTaskCommand);
-        await UpdateShowedTasksByDate(TaskDate);
+        await UpdateShowingTasksByDate(TaskDate);
     }
 
     private static IEnumerable<double> AdjustTimeToTarget(IEnumerable<TrackedTask> tasks, double target)

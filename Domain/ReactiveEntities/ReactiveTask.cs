@@ -8,7 +8,8 @@ public class ReactiveTask : ReactiveObject
     private TimeSpan _timeWasted;
     private bool _isTracked;
 
-    public Guid Id { get; set; }
+    public Guid Id { get; }
+    public DateTime CreatedOn { get; init; }
 
     public bool IsTracked
     {
@@ -27,11 +28,12 @@ public class ReactiveTask : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _timeWasted, value);
     }
 
-    public ReactiveTask(Guid id, string content, TimeSpan timeWasted)
+    public ReactiveTask(Guid id, string content, TimeSpan timeWasted, DateTime createdOn)
     {
         Id = id;
         Content = content;
         TimeWasted = timeWasted;
+        CreatedOn = createdOn;
     }
     
     

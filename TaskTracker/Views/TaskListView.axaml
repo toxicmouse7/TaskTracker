@@ -8,16 +8,6 @@
              Foreground="Transparent"
              x:Class="TaskTracker.Views.TaskListView">
     <DockPanel>
-        <!-- <ExperimentalAcrylicBorder IsHitTestVisible="False"> -->
-        <!--     <ExperimentalAcrylicBorder.Material> -->
-        <!--         <ExperimentalAcrylicMaterial -->
-        <!--             BackgroundSource="Digger" -->
-        <!--             TintColor="Black" -->
-        <!--             TintOpacity="1" -->
-        <!--             PlatformTransparencyCompensationLevel="1" -->
-        <!--             MaterialOpacity="0.8" /> -->
-        <!--     </ExperimentalAcrylicBorder.Material> -->
-        <!-- </ExperimentalAcrylicBorder> -->
         <Panel DockPanel.Dock="Top">
             <Button CornerRadius="100"
                     HorizontalAlignment="Left"
@@ -26,7 +16,7 @@
                     ToolTip.Tip="Export To Clipboard"
                     x:CompileBindings="False"
                     Command="{Binding $parent[UserControl].ExportToClipboard}"
-                    IsEnabled="{Binding !IsTrackingAny}">
+                    IsEnabled="{Binding TrackedTask, Converter={x:Static ObjectConverters.IsNull}}">
                 <PathIcon Data="{StaticResource ExportRegular}" />
             </Button>
             <CalendarDatePicker HorizontalAlignment="Center"
@@ -103,7 +93,8 @@
                                             CornerRadius="100"
                                             x:CompileBindings="False"
                                             ToolTip.Tip="Start Tracking"
-                                            IsEnabled="{Binding !DataContext.IsTrackingAny, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                            Background="Transparent"
+                                            IsEnabled="{Binding DataContext.TrackedTask, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Converter={x:Static ObjectConverters.IsNull}}"
                                             IsVisible="{Binding !IsTracked}"
                                             Command="{Binding Path=DataContext.StartTrackingCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                             CommandParameter="{Binding}">
@@ -112,6 +103,7 @@
                                         <Button
                                             CornerRadius="100"
                                             x:CompileBindings="False"
+                                            Background="Transparent"
                                             ToolTip.Tip="Stop Tracking"
                                             IsVisible="{Binding IsTracked}"
                                             Command="{Binding Path=DataContext.StopTrackingCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
